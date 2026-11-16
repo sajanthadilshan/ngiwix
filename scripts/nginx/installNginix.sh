@@ -37,7 +37,7 @@ write_if_missing() {   # $1 = path, content on stdin
 
 write_if_missing "$ROOT/nginx/nginx.conf" <<'EOF'
 user nginx;
-worker_processes 2;
+worker_processes 1;
 
 events {
     worker_connections 4096;
