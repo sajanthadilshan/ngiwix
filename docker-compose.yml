@@ -65,6 +65,8 @@ services:
 
     volumes:
       - /etc/wireguard:/etc/wireguard
+      - /root/wireguard:/root/wireguard
+      - /home/wireguard:/home/wireguard
       - /home/ngiwix:/home/ngiwix
       - ./scripts:/scripts
       - ./nginx:/nginx
