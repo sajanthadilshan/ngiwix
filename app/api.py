@@ -98,12 +98,16 @@ def listTunnel(request: Request):
 #-------------------------------------------
 
 class NewNginxBody(BaseModel):
-    id: str
+    domain: str
+    clientIp: str
+    clientPort: str
+    ssl: str
+
 
 @app.post("/nginx/new")
 def addNewConfig(request: Request, body: NewNginxBody):
     auth(request)
-    data = services.addNewConfig(body.id)
+    data = services.addNewConfig(body.domain, body.clientIp, body.clientPort, body.ssl)
     if data != False:
         return returnData(True, "New nginx configuration created")
     else:
@@ -111,12 +115,12 @@ def addNewConfig(request: Request, body: NewNginxBody):
     
 
 class removeConfig(BaseModel):
-    id: str
+    domain: str
 
 @app.post("/nginx/remove")
 def rmConfig(request: Request, body: removeConfig):
     auth(request)
-    data = services.removeConfig(body.id)
+    data = services.removeConfig(body.domain)
     if data != False:
         return returnData(True, "Nginx configuration deleted")
     else:

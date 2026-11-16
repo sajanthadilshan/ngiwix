@@ -3,7 +3,7 @@ import json
 from pathlib import Path
 import re
 
-SCRIPT_DIR = "/scripts"
+SCRIPT_DIR = Path("/scripts")
 
 #wireguard
 
@@ -23,7 +23,7 @@ def addWgTunnel(tunnelId):
                 try:
                     file = Path(config_path).read_text(encoding="utf-8")
                     return file
-                except() as e:
+                except OSError as e:
                     print(f"error reading config: {e}")
                     return False
             else:
