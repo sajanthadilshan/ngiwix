@@ -5,27 +5,35 @@ from pydantic import BaseModel
 import services as services
 
 app = FastAPI()
-API_TOKEN = os.getenv("API_TOKEN")
-MAX_WG_TUNNELS = int(os.getenv("MAX_WG_TUNNELS", "10"))
-MAX_NGINX_CONFIGS = int(os.getenv("MAX_NGINX_CONFIGS", "10"))
 
+CONFIG_FILE = "/config/ngiwix.env"
+
+def get_setting(key, default=None):
+    try:
+        with open(CONFIG_FILE) as f:
+            for line in f:
+                line = line.strip()
+                if line and not line.startswith("#") and "=" in line:
+                    k, v = line.split("=", 1)
+                    if k.strip() == key:
+                        return v.strip()
+    except OSError:
+        pass
+    return os.getenv(key, default)
 
 def auth(request: Request):
     api_key = request.headers.get("Authorization", "")
+    token = get_setting("API_TOKEN")
 
     if not api_key:
-        raise HTTPException(
-            status_code = 401,
-            detail = "API key is missing!"
-        )
-    
-    if not API_TOKEN or not hmac.compare_digest(api_key, API_TOKEN):
-        raise HTTPException(
-            status_code = 403,
-            detail = "Invalid API key!" 
-        )
+        raise HTTPException(status_code=401, detail="API key is missing!")
+    if not token or not hmac.compare_digest(api_key.encode(), token.encode()):
+        raise HTTPException(status_code=403, detail="Invalid API key!")
     return True
 
+
+# max_wg = int(get_setting("MAX_WG_TUNNELS", "10"))
+# max_nginx = int(get_setting("MAX_NGINX_CONFIGS", "10"))
 
 def returnData(status, body = {}):
     if status == True:

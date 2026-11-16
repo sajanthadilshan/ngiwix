@@ -2,13 +2,14 @@
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
-ENV_FILE="$ROOT/.env"
+ENV_FILE="$ROOT/config/ngiwix.env"
 WG_NIC=$(grep -oP '^SERVER_WG_NIC=\K\S+' /etc/wireguard/params 2>/dev/null || echo wg0)
 cd "$ROOT" || exit 1
 
 
 
 set_env() {   # usage: set_env API_TOKEN "$api_key"
+    mkdir -p "$(dirname "$ENV_FILE")"
     touch "$ENV_FILE"
     grep -v "^$1=" "$ENV_FILE" > "$ENV_FILE.tmp" || true
     echo "$1=$2" >> "$ENV_FILE.tmp"
@@ -57,7 +58,6 @@ configure_en_v(){
         set_env MAX_NGINX_CONFIGS "$nginix_conf_limit"
 
     fi
-    docker compose up -d --force-recreate python-api 2>/dev/null || true
 }
 
 automaticInstall(){
@@ -276,7 +276,7 @@ maninMenu(){
         bash "$SCRIPT_DIR"/pyapi/pyApiInstall.sh --uninstall
 
         echo "Removing environment variables..."
-        rm -f "$ENV_FILE"
+        rm -rf "$ROOT/config"
 
         echo ""
         echo "All services uninstalled successfully"

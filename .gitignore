@@ -2,4 +2,4 @@ python.txt
 .vscode
 text.txt
 db.sql
-
+.env

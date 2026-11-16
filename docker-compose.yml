@@ -66,6 +66,7 @@ services:
       - /etc/wireguard:/etc/wireguard
       - ./scripts:/scripts
       - ./nginx:/nginx
+      - ./config:/config:ro
 
     networks:
       - proxy
