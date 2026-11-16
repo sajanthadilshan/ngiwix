@@ -152,7 +152,7 @@ def getAllConfig() -> str:
 
 # print(addNewConfig("my.com", "145.24.23.12", "8080"))
 # print(removeConfig("my.com"))
-print(listwgTunnels())
+# print(listwgTunnels())
 #print(getAllConfig())
 
 

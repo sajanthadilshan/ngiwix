@@ -101,7 +101,7 @@ class NewNginxBody(BaseModel):
     domain: str
     clientIp: str
     clientPort: str
-    ssl: str
+    ssl: str  #yes or no
 
 
 @app.post("/nginx/new")

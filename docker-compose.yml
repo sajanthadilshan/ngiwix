@@ -59,17 +59,17 @@ services:
     container_name: fastapi-app
     restart: unless-stopped
 
-    ports:
-      - "8000:8000"
+    network_mode: host
+    cap_add:
+      - NET_ADMIN
 
     volumes:
       - /etc/wireguard:/etc/wireguard
+      - /home/ngiwix:/home/ngiwix
       - ./scripts:/scripts
       - ./nginx:/nginx
       - ./config:/config:ro
-
-    networks:
-      - proxy
+      - /var/run/docker.sock:/var/run/docker.sock
 
     deploy:
       resources:
